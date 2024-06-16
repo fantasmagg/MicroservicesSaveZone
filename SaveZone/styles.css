@@ -238,16 +238,18 @@ input[type="file"] {
 #urlInputContainer {
     text-align: center;
     margin-top: 40px; /* Aumentado el margen superior */
+    width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
+    padding: 0 20px; /* Padding lateral para que no toque los bordes */
 }
 svg {
     display: block;
-    margin: 0 auto 50px; /* Margen inferior aumentado para separar más */
+    margin: 25px auto 50px; /* Margen superior e inferior para separar más */
     max-width: 100%; /* Asegura que el SVG no se desborde */
-    margin-top: 25px;
 }
 #urlInput {
-    padding: 10px 15px; /* Aumentado el padding para mayor espacio alrededor del input */
-    width: 300px;
+    padding: 10px; /* Padding ajustado para un espacio adecuado */
+    width: 100%; /* Ancho aumentado para que el input ocupe todo el contenedor */
+    max-width: 550px; /* Ancho máximo del input */
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
