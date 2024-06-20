@@ -13,12 +13,12 @@ import spring_boot_webflux_client_model.client.app.models.UrlDto;
 public class UrlServiceImpl  implements UrlService{
 
 	@Autowired
-	private WebClient client;
+	private WebClient.Builder client;
 	
 	@Override
 	public Mono<UrlDto> save(UrlDto url) {
 
-		return client.post()
+		return client.build().post()
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
 				.body(BodyInserters.fromValue(url))
