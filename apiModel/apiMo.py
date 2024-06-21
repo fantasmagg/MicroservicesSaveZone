@@ -1,29 +1,44 @@
+import os
+import signal
+import sys
+from flask_cors import CORS
 from flask import Flask, request, jsonify
 import pandas as pd
 import re
 from tld import get_tld
 from joblib import load
+import py_eureka_client.eureka_client as eureka_client
+import logging
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})  # Permite todas las solicitudes desde cualquier origen, cambia esto según sea necesario
+
+# Configuración de Eureka usando py_eureka_client
+eureka_client.init(
+    eureka_server="http://localhost:8761/eureka",
+    app_name="python-api",
+    instance_port=5000,
+    instance_ip="127.0.0.1",
+    renewal_interval_in_secs=10,
+    duration_in_secs=30
+)
+
+# Configurar logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 # Definir funciones de extracción de características
 def having_ip_address(url):
     match = re.search(
-        r'(([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.)',
+        r'(([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.)',
         url)
-    if match:
-        return 1
-    else:
-        return 0
+    return 1 if match else 0
 
 def abnormal_url(url):
     try:
         hostname = url.split('/')[2]
         match = re.search(re.escape(hostname), url)
-        if match:
-            return 1
-        else:
-            return 0
+        return 1 if match else 0
     except IndexError:
         return 0
 
@@ -46,10 +61,7 @@ def shortening_service(url):
     match = re.search(
         r'bit\.ly|goo\.gl|shorte\.st|go2l\.ink|x\.co|ow\.ly|t\.co|tinyurl|tr\.im|is\.gd|cli\.gs|yfrog\.com|migre\.me|ff\.im|tiny\.cc|url4\.eu|twit\.ac|su\.pr|twurl\.nl|snipurl\.com|short\.to|BudURL\.com|ping\.fm|post\.ly|Just\.as|bkite\.com|snipr\.com|fic\.kr|loopt\.us|doiop\.com|short\.ie|kl\.am|wp\.me|rubyurl\.com|om\.ly|to\.ly|bit\.do|t\.co|lnkd\.in|db\.tt|qr\.ae|adf\.ly|bitly\.com|cur\.lv|tinyurl\.com|ow\.ly|bit\.ly|ity\.im|q\.gs|is\.gd|po\.st|bc\.vc|twitthis\.com|u\.to|j\.mp|buzurl\.com|cutt\.us|u\.bb|yourls\.org|prettylinkpro\.com|scrnch\.me|filoops\.info|vzturl\.com|qr\.net|1url\.com|tweez\.me|v\.gd|tr\.im|link\.zip\.net',
         url)
-    if match:
-        return 1
-    else:
-        return 0
+    return 1 if match else 0
 
 def count_https(url):
     return url.count('https')
@@ -138,10 +150,25 @@ def predict_url(url, model, label_mapping):
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    data = request.get_json()
-    url = data['url']
-    predicted_class, probabilities = predict_url(url, model, label_mapping)
-    return jsonify({'url': url, 'prediction': predicted_class, 'probabilities': probabilities})
+    try:
+        data = request.get_json()
+        url = data['url']
+        predicted_class, probabilities = predict_url(url, model, label_mapping)
+        return jsonify({'url': url, 'prediction': predicted_class, 'probabilities': probabilities})
+    except Exception as e:
+        logger.error(f"Error en la predicción: {e}")
+        return jsonify({'error': 'Prediction failed', 'message': str(e)}), 500
+
+def handle_shutdown(signum, frame):
+    logger.info("Se recibió señal de terminación, desregistrando de Eureka...")
+    try:
+        eureka_client.stop()
+    except Exception as e:
+        logger.error(f"Error al desregistrar de Eureka: {e}")
+    finally:
+        os._exit(0)
 
 if __name__ == '__main__':
+    signal.signal(signal.SIGTERM, handle_shutdown)
+    signal.signal(signal.SIGINT, handle_shutdown)
     app.run(host='0.0.0.0', port=5000)
