@@ -10,12 +10,19 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class AppConfig {
 
 	@Value("${microservice1.base.endpoint}")
-	private String url;
+    private String url1;
+
+    @Value("${microservice2.base.endpoint}")
+    private String url2;
 	
 	@Bean
-	@LoadBalanced
 	public WebClient.Builder registrarWebClient() {
-		return WebClient.builder().baseUrl(url);
+		return WebClient.builder().baseUrl(url1);
+	}
+	
+	@Bean
+	public WebClient.Builder registrarWebClientPdf(){
+		return WebClient.builder().baseUrl(url2);
 	}
 	
 }

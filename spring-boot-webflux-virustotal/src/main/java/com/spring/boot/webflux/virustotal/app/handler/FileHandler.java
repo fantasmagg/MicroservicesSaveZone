@@ -1,10 +1,11 @@
-package spring_boot_webflux_client_model.client.app.handler;
+package com.spring.boot.webflux.virustotal.app.handler;
 
 import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,31 +16,17 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import com.spring.boot.webflux.virustotal.app.dtos.services.FilesServices;
+
 import reactor.core.publisher.Mono;
-import spring_boot_webflux_client_model.client.app.models.UrlDto;
-import spring_boot_webflux_client_model.client.app.models.services.UrlService;
 
 @Component
-public class UrlHandler {
+public class FileHandler {
 
 	@Autowired
-	private UrlService services;
+	private FilesServices services;
 	
-	public Mono<ServerResponse> crear(ServerRequest request){
-		
-		Mono<UrlDto> url = request.bodyToMono(UrlDto.class);
-		return url.flatMap(u -> {
-			if(u.getUrl()==null) {
-				u.setUrl("https://exmple.com/");
-			}
-			return services.save(u);
-		}).flatMap(u-> ServerResponse.created(URI.create("/api/client/".concat(u.getUrl())))
-				.contentType(MediaType.APPLICATION_JSON)
-				.body(BodyInserters.fromValue(u)));
-		
-		
-		
-	}
+
 	
 	public Mono<ServerResponse> post (ServerRequest request){
 		return request.multipartData()
@@ -87,4 +74,4 @@ public class UrlHandler {
 						);
 	}
 	
-}
+} 
