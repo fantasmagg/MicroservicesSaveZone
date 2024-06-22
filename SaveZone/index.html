@@ -71,55 +71,106 @@
             </form>
         </div>
         
+        <!-- Contenedor para mostrar la respuesta de la API -->
+        <div id="apiResponseContainer" class="response-container">
+            <div id="apiResponse" class="response-content"></div>
+        </div>
+        
+        <style>
+             .response-container {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        max-width: 500px; /* Ancho máximo para mantenerlo compacto */
+        margin: 20px auto; /* Centrado vertical y horizontal */
+        display: none; /* Oculto inicialmente */
+    }
+
+    .response-content {
+        padding: 10px;
+    }
+
+    .response-content p {
+        margin: 5px 0;
+    }
+
+    .response-content ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .response-content li {
+        margin-bottom: 5px;
+    }
+
+    .response-content strong {
+        color: #007bff;
+    }
+        </style>
+        
         <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Seleccionar el formulario y manejar el evento submit
-            const form = document.getElementById('urlForm');
-        
-            form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
-        
-                const urlInput = document.getElementById('urlInput').value;
-        
-                // URL de la API a la que se enviará la solicitud POST
-                const apiUrl = 'http://localhost:9090/api/client';
-        
-                // Datos a enviar en el body de la solicitud
-                const data = {
-                    url: urlInput
-                };
-        
-                // Opciones de la solicitud
-                const options = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                };
-        
-                // Función para enviar la solicitud
-                async function sendRequest() {
-                    try {
-                        const response = await fetch(apiUrl, options);
-                        if (!response.ok) {
-                            throw new Error('Error en la solicitud: ' + response.statusText);
-                        }
-                        const responseData = await response.json();
-                        console.log('Respuesta de la API:', responseData);
-                        // Aquí puedes manejar la respuesta de la API como desees
-                        alert('Solicitud exitosa!');
-                    } catch (error) {
-                        console.error('Error:', error);
-                        alert('Error al enviar la solicitud');
-                    }
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('urlForm');
+            
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault(); 
+            
+                    const urlInput = document.getElementById('urlInput').value;
+            
+                    const apiUrl = 'http://localhost:9090/api/client';
+            
+                    const data = {
+                        url: urlInput
+                    };
+            
+                    const options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    };
+            
+                    async function sendRequest() {
+                        try { 
+                            const response = await fetch(apiUrl, options);
+                if (!response.ok) {
+                    throw new Error('Error en la solicitud: ' + response.statusText);
                 }
+                const responseData = await response.json();
+
+                // Formatear la respuesta en HTML
+                const formattedResponse = `
+                    <p><strong>URL:</strong> ${responseData.url}</p>
+                    <p><strong>Prediction:</strong> ${responseData.prediction}</p>
+                    <ul>
+                        <li><strong>Benign:</strong> ${responseData.probabilities.benign}</li>
+                        <li><strong>Defacement:</strong> ${responseData.probabilities.defacement}</li>
+                        <li><strong>Malware:</strong> ${responseData.probabilities.malware}</li>
+                        <li><strong>Phishing:</strong> ${responseData.probabilities.phishing}</li>
+                    </ul>
+                `;
+
+                // Mostrar el contenedor y la respuesta formateada
+                const apiResponseContainer = document.getElementById('apiResponseContainer');
+                apiResponseContainer.style.display = 'block';
+                const apiResponse = document.getElementById('apiResponse');
+                apiResponse.innerHTML = formattedResponse;
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al enviar la solicitud');
+            }
+        }
+
+        // Llamar a la función para enviar la solicitud
+        sendRequest();
+    });
+});
+</script>
         
-                // Llamar a la función para enviar la solicitud
-                sendRequest();
-            });
-        });
-        </script>
+        
     </main>
     <footer class="footer">
         <div class="footer-content">
