@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="detalles.css">
-    <title>SaveZone</title>
+    <title>SaveZone - Results</title>
 </head>
 <body>
     <header class="header">
@@ -33,33 +33,53 @@
         <div class="file-info">
             <div>
                 <h2>File Details</h2>
-                <p>File name: example.exe</p>
-                <p>File size: 2.3 MB</p>
+                <p id="fileName">File name: example.exe</p>
+                
             </div>
             <div>
                 <h2>Analysis</h2>
-                <p>Detection ratio: 0/64</p>
-                <p>First submission: 2023-06-01</p>
+                <p id="detectionRatio">Detection ratio: 0/64</p>
             </div>
         </div>
         <div class="sections">
             <h2>Details</h2>
             <div class="section-content">
-                <p>SHA-256: efcaea7f299844abbf8f0f2f16d66cdc2bd7a85db63b4bb72327da3240e0d9ad</p>
-                <p>MD5: d41d8cd98f00b204e9800998ecf8427e</p>
+                <p id="sha256">SHA-256: efcaea7f299844abbf8f0f2f16d66cdc2bd7a85db63b4bb72327da3240e0d9ad</p>
+                <p id="md5">MD5: d41d8cd98f00b204e9800998ecf8427e</p>
             </div>
-            <h2>Security vendors'analysis</h2>
+            <h2>Security vendors' analysis</h2>
             <div class="section-content">
-                <p>malicious: 0<br>
+                <p id="analysisResults">
+                    malicious: 0<br>
                     failure: 0<br>
                     undetected: 64<br>
                     suspicious: 0<br>
                     harmless: 0<br>
                     timeout: 0<br>
                     type-unsupported: 14<br>
-                    confirmed-timeout: 0</p>
+                    confirmed-timeout: 0
+                </p>
             </div>
         </div>
     </div>
+
+    <script>
+        // Obtener parámetros de la URL
+        const params = new URLSearchParams(window.location.search);
+
+        // Actualizar el contenido de la página con los datos obtenidos
+        document.getElementById('fileName').textContent = `File name: ${params.get('fileName')}`;
+        document.getElementById('detectionRatio').textContent = `Detection ratio: ${params.get('detectionRatio')}`;
+        document.getElementById('analysisResults').innerHTML = `
+            malicious: ${params.get('malicious')}<br>
+            failure: ${params.get('failure')}<br>
+            undetected: ${params.get('undetected')}<br>
+            suspicious: ${params.get('suspicious')}<br>
+            harmless: ${params.get('harmless')}<br>
+            timeout: ${params.get('timeout')}<br>
+            type-unsupported: ${params.get('typeUnsupported')}<br>
+            confirmed-timeout: ${params.get('confirmedTimeout')}
+        `;
+    </script>
 </body>
 </html>
