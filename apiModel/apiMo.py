@@ -9,9 +9,12 @@ from tld import get_tld
 from joblib import load
 import py_eureka_client.eureka_client as eureka_client
 import logging
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  # Permite todas las solicitudes desde cualquier origen, cambia esto según sea necesario
+CORS(app, resources={
+    r"/*": {"origins": "*"}})  # Permite todas las solicitudes desde cualquier origen, cambia esto según sea necesario
 
 # Configuración de Eureka usando py_eureka_client
 eureka_client.init(
@@ -27,12 +30,19 @@ eureka_client.init(
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+# Configuración de MongoDB
+client = MongoClient('mongodb://localhost:27017/')
+db = client['url_db']
+url_collection = db['urls']
+
+
 # Definir funciones de extracción de características
 def having_ip_address(url):
     match = re.search(
         r'(([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.)',
         url)
     return 1 if match else 0
+
 
 def abnormal_url(url):
     try:
@@ -42,20 +52,26 @@ def abnormal_url(url):
     except IndexError:
         return 0
 
+
 def count_dot(url):
     return url.count('.')
+
 
 def count_www(url):
     return url.count('www')
 
+
 def count_atrate(url):
     return url.count('@')
+
 
 def no_of_dir(url):
     return url.count('/')
 
+
 def no_of_embed(url):
     return url.count('//')
+
 
 def shortening_service(url):
     match = re.search(
@@ -63,26 +79,34 @@ def shortening_service(url):
         url)
     return 1 if match else 0
 
+
 def count_https(url):
     return url.count('https')
+
 
 def count_http(url):
     return url.count('http')
 
+
 def count_per(url):
     return url.count('%')
+
 
 def count_ques(url):
     return url.count('?')
 
+
 def count_hyphen(url):
     return url.count('-')
+
 
 def count_equal(url):
     return url.count('=')
 
+
 def url_length(url):
     return len(url)
+
 
 def hostname_length(url):
     try:
@@ -90,16 +114,20 @@ def hostname_length(url):
     except IndexError:
         return 0
 
+
 def suspicious_words(url):
     return int('security' in url or 'confirm' in url or 'bank' in url)
+
 
 def digit_count(url):
     digits = [i for i in url if i.isdigit()]
     return len(digits)
 
+
 def letter_count(url):
     letters = [i for i in url if i.isalpha()]
     return len(letters)
+
 
 def fd_length(url):
     try:
@@ -107,14 +135,17 @@ def fd_length(url):
     except IndexError:
         return 0
 
+
 def tld_length(tld):
     return len(tld) if tld else 0
+
 
 # Mapear etiquetas de texto a valores numéricos
 label_mapping = {'benign': 0, 'defacement': 1, 'phishing': 2, 'malware': 3}
 
 # Cargar el modelo
 model = load('model_filenameG.joblib')
+
 
 def predict_url(url, model, label_mapping):
     features = pd.Series([
@@ -148,16 +179,42 @@ def predict_url(url, model, label_mapping):
     probabilities_dict = {reverse_label_mapping[i]: format(prob, '.6f') for i, prob in enumerate(probabilities[0])}
     return predicted_class, probabilities_dict
 
+
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
         data = request.get_json()
         url = data['url']
+
         predicted_class, probabilities = predict_url(url, model, label_mapping)
+
+        # Verificar si la URL ya está en la base de datos
+        existing_url = url_collection.find_one({"url": url})
+        if existing_url:
+            # Incrementar el contador si la URL ya existe
+            url_collection.update_one({"_id": existing_url["_id"]}, {"$inc": {"count": 1}})
+        else:
+            # Insertar nueva URL con contador inicial de 1 y almacenar la clasificación
+            url_collection.insert_one({"url": url, "count": 1, "classification": predicted_class})
+
         return jsonify({'url': url, 'prediction': predicted_class, 'probabilities': probabilities})
     except Exception as e:
         logger.error(f"Error en la predicción: {e}")
         return jsonify({'error': 'Prediction failed', 'message': str(e)}), 500
+
+
+@app.route('/scanned_urls', methods=['GET'])
+def get_scanned_urls():
+    try:
+        # Obtener todas las URLs de la base de datos
+        urls = url_collection.find({}, {"_id": 0, "url": 1, "count": 1, "classification": 1})
+        # Convertir los resultados a una lista de diccionarios
+        urls_list = list(urls)
+        return jsonify(urls_list)
+    except Exception as e:
+        logger.error(f"Error al obtener las URLs escaneadas: {e}")
+        return jsonify({'error': 'Failed to fetch scanned URLs', 'message': str(e)}), 500
+
 
 def handle_shutdown(signum, frame):
     logger.info("Se recibió señal de terminación, desregistrando de Eureka...")
@@ -167,6 +224,7 @@ def handle_shutdown(signum, frame):
         logger.error(f"Error al desregistrar de Eureka: {e}")
     finally:
         os._exit(0)
+
 
 if __name__ == '__main__':
     signal.signal(signal.SIGTERM, handle_shutdown)
