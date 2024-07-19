@@ -16,7 +16,8 @@ public class RouterConfig {
 	public RouterFunction<ServerResponse> rutas(UrlHandler handler){
 		return RouterFunctions.route(RequestPredicates.POST("/api/client"), handler::crear)
 				.andRoute(RequestPredicates.POST("/api/virus/files"),handler::post)
-				.andRoute(RequestPredicates.GET("/api/virus/analyses/{id}"), handler::getArch);
+				.andRoute(RequestPredicates.GET("/api/virus/analyses/{id}"), handler::getArch)
+				.andRoute(RequestPredicates.GET("/api/urls"),handler::getUrls);
 	}
 	
 }

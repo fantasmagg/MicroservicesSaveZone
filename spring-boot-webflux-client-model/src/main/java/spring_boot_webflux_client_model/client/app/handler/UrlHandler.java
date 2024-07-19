@@ -16,6 +16,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 import reactor.core.publisher.Mono;
+import spring_boot_webflux_client_model.client.app.dto.HistorialUrlDto;
 import spring_boot_webflux_client_model.client.app.models.UrlDto;
 import spring_boot_webflux_client_model.client.app.models.services.UrlService;
 
@@ -24,6 +25,12 @@ public class UrlHandler {
 
 	@Autowired
 	private UrlService services;
+	
+	public Mono<ServerResponse> getUrls(ServerRequest request){
+		return ServerResponse.ok()
+				.contentType(MediaType.APPLICATION_JSON)
+				.body(services.getUrls(),HistorialUrlDto.class);
+	}
 	
 	public Mono<ServerResponse> crear(ServerRequest request){
 		
