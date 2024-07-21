@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+    <link rel="stylesheet" href="prueba.css">
+    <script src="prueba.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Perfil de Usuario</h1>
+            <div class="user-info">
+                <img src="avatar.jpg" alt="Foto de perfil">
+                <div class="user-details">
+                    <p><strong>Nombre:</strong> Juan Pérez</p>
+                    <p><strong>Correo electrónico:</strong> juanperez@example.com</p>
+                    <p><strong>Última conexión:</strong> 8 de julio de 2024</p>
+                </div>
+            </div>
+        </header>
+
+        <section class="password-section">
+            <div class="container">
+                <h2>Cambiar Contraseña</h2>
+                <p>Aquí puedes cambiar tu contraseña si lo necesitas.</p>
+                <a href="#" class="change-password-link" id="change-password-link">Cambiar Contraseña</a>
+                <form action="#" method="post" class="password-form" id="password-form">
+                    <label for="current-password">Contraseña actual</label>
+                    <input type="password" id="current-password" name="current-password" required>
+                    <label for="new-password">Nueva contraseña</label>
+                    <input type="password" id="new-password" name="new-password" required>
+                    <label for="confirm-password">Confirmar nueva contraseña</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required>
+                    <button type="submit">Guardar cambios</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="activity-history">
+            <h2>Historial de Actividades</h2>
+            <ul>
+                <li>Compra realizada el 8 de julio de 2024</li>
+                <li>Actualización de perfil el 5 de mayo de 2024</li>
+                <li>Inicio de sesión el 1 de enero de 2024</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 Todos los derechos reservados. | Desarrollado por <a href="#">Tu Empresa</a></p>
+        </footer>
+    </div>
+</body>
+</html>

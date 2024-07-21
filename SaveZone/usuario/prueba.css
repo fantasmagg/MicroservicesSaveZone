@@ -1,0 +1,149 @@
+/* Estilos generales */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-info img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+    border: 3px solid #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-details {
+    text-align: left;
+}
+
+.user-details p {
+    color: #666;
+    margin: 5px 0;
+}
+
+.password-section {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.password-section .container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.password-section h2 {
+    color: #333;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.password-section p {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.password-form {
+    display: none; /* Formulario inicialmente oculto */
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.password-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.password-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.password-form button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.password-form button:hover {
+    background-color: #218838;
+}
+
+.activity-history {
+    margin-bottom: 30px;
+}
+
+.activity-history h2 {
+    color: #333;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.activity-history ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.activity-history li {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-left: 4px solid #6cb2eb;
+}
+
+footer {
+    text-align: center;
+    color: #666;
+    margin-top: 30px;
+    padding-top: 10px;
+    border-top: 1px solid #ccc;
+}
+
+footer a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
