@@ -10,7 +10,9 @@
 <body>
     <header class="header">
         <div class="logo">
-            <img src="img/logo1.png" alt="Logo de la marca">
+            <a href="index.html">
+                <img src="img/logo1.png" alt="Logo de la marca">
+            </a>
         </div>
         <nav>
             <ul class="nav-links">
@@ -27,9 +29,13 @@
                         </button>
                     </a>
                 </li>
-            </ul>            
+                <li><a href="usuario/prueba.html">Perfil</a></li> <!-- Nueva pestaña "Perfil" -->
+                
+                
+            </ul>
         </nav>
     </header>
+    
 
     <main class="main-content">
         <div class="center-content">
@@ -42,7 +48,8 @@
         <div class="button-group">
             <button class="action-button" onclick="showFileChooser()">FILE</button>
             <button class="action-button" onclick="showUrlInput()">URL</button>
-            <button class="action-button">SEARCH</button>
+            <button class="action-button" onclick="redirectToPage()">DataSet</button>
+            
         </div>
         <div class="container">
             <div id="fileInputContainer">
@@ -189,6 +196,10 @@
             document.getElementById('fileInputContainer').style.display = 'none';
             document.getElementById('urlInputContainer').style.display = 'block';
         }
+
+        function redirectToPage() {
+        window.location.href = '/SaveZone/usuario/data/dataset.html';
+    }
     </script>
     
     

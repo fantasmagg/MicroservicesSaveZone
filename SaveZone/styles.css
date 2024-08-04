@@ -6,11 +6,6 @@
     padding: 0;
     font-family: 'Source Sans Pro', sans-serif;
 }
-
-body {
-   
-}
-
 .header {
     display: flex;
     justify-content: space-between;
@@ -240,6 +235,7 @@ input[type="file"] {
     margin-top: 40px; /* Aumentado el margen superior */
     width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
     padding: 0 20px; /* Padding lateral para que no toque los bordes */
+    display: none;
 }
 svg {
     display: block;
