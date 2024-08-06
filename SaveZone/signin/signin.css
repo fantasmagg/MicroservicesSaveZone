@@ -161,3 +161,16 @@
     color: #8B8E98;
     text-decoration: underline;
   }
+  .boton-iniciar-sesion {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Color verde */
+    color: white;
+    text-decoration: none;
+    border-radius:   
+   5px;
+    cursor: pointer;
+    text-decoration: none; /* Elimina el subrayado */
+  border: 2px solid #3e8e41; /* Añade un borde */
+  border-bottom: none;
+  }

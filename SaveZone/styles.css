@@ -1,5 +1,11 @@
 /* styles.css */
-
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding-bottom: 50px; /* Espacio inferior para evitar que el contenido choque con el footer */
+}
 * {
     box-sizing: border-box;
     margin: 0;
@@ -189,6 +195,7 @@
     background-color: #1b3039; /* Color de la línea */
 }
 .footer {
+    
     border-top: 1px solid #e6e6e6; /* Línea divisora */
     color: #000000;
     padding: 20px 0; /* Ajusta el espacio interior */
@@ -250,4 +257,55 @@ svg {
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 16px; /* Tamaño de fuente ajustado para mejorar la legibilidad */
+}
+
+#urlForm button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+#urlForm button:hover {
+    background-color: #0056b3;
+}
+#resultContainer {
+    margin-top: 20px;
+    text-align: left;
+    display: inline-block;
+    padding: 3px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    padding-bottom: 1px;
+    margin-bottom: 20px;
+    width: 400px;
+    
+}
+.hidden {
+    display: none;
+}
+.result-item {
+    margin: 5px 0;
+}
+.result-title {
+    font-weight: bold;
+}
+.probability-bar {
+    height: 20px;
+    border-radius: 5px;
+}
+.benign {
+    background-color: #4caf50;
+}
+.defacement {
+    background-color: #ffeb3b;
+}
+.malware {
+    background-color: #f44336;
+}
+.phishing {
+    background-color: #2196f3;
 }

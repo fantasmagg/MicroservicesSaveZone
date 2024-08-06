@@ -109,26 +109,38 @@ h1 {
     background-color: #218838;
 }
 
+/* Estilos para la sección de historial de actividades */
 .activity-history {
-    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
 }
 
-.activity-history h2 {
-    color: #333;
-    border-bottom: 2px solid #ccc;
-    padding-bottom: 10px;
+/* Limita el ancho máximo de la tabla y centra el contenido */
+.activity-history table {
+    width: 100%;
+    max-width: 800px; /* Ajusta el ancho máximo según sea necesario */
+    border-collapse: collapse;
+    overflow: hidden; /* Asegura que no haya desbordamiento visual */
 }
 
-.activity-history ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.activity-history li {
-    margin: 10px 0;
+/* Estilo para las celdas de la tabla */
+.activity-history td, .activity-history th {
     padding: 10px;
-    background-color: #f9f9f9;
-    border-left: 4px solid #6cb2eb;
+    text-align: left; /* Cambiar a 'center' si prefieres centrar el texto */
+    border: 1px solid #ddd;
+    word-break: break-word; /* Permite saltos de línea en las URLs largas */
+    max-width: 400px; /* Limita el ancho de las celdas */
+    overflow: hidden; /* Oculta cualquier contenido que se desborde */
+    text-overflow: ellipsis; /* Muestra puntos suspensivos para contenido que se desborda */
+    white-space: normal; /* Permite que el contenido se ajuste en múltiples líneas */
+}
+
+/* Estilo opcional para los encabezados de la tabla */
+.activity-history th {
+    background-color: #f4f4f4;
+    font-weight: bold;
 }
 
 footer {

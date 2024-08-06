@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navbar Dos</title>
+    <title>SaveZone</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -35,8 +35,6 @@
             </ul>
         </nav>
     </header>
-    
-
     <main class="main-content">
         <div class="center-content">
             <img src="img/logo1.png" alt="Logo de la marca" class="center-logo">
@@ -65,56 +63,7 @@
                   
                 <label for="fileInput" class="file-label">Choose File</label>
             </div>
-        </div>
-    
-        <script>
-            document.getElementById('fileInput').addEventListener('change', async (event) => {
-                const file = event.target.files[0];
-                if (file) {
-                    const formData = new FormData();
-                    formData.append('file', file);
-    
-                    try {
-                        const response = await fetch('http://localhost:9090/api/virus/files', {
-                            method: 'POST',
-                            body: formData,
-                        });
-                        const result = await response.json();
-                        const id = result.data.id;
-                        console.log('ID:', id);
-    
-                        // Consumir la segunda ruta con el ID obtenido
-                        const analysisResponse = await fetch(`http://localhost:9090/api/virus/analyses/${id}`, {
-                            method: 'GET'
-                        });
-                        const analysisResult = await analysisResponse.json();
-    
-                        // Obtener el nombre del archivo
-                        const fileName = file.name;
-    
-                        // Redirigir a la página de resultados con los datos obtenidos
-                        const params = new URLSearchParams({
-                            detectionRatio: `${analysisResult.data.attributes.stats.malicious}/${analysisResult.data.attributes.stats.undetected + analysisResult.data.attributes.stats.malicious}`,
-                            malicious: analysisResult.data.attributes.stats.malicious,
-                            failure: analysisResult.data.attributes.stats.failure,
-                            undetected: analysisResult.data.attributes.stats.undetected,
-                            suspicious: analysisResult.data.attributes.stats.suspicious,
-                            harmless: analysisResult.data.attributes.stats.harmless,
-                            timeout: analysisResult.data.attributes.stats.timeout,
-                            typeUnsupported: analysisResult.data.attributes.stats['type-unsupported'],
-                            confirmedTimeout: analysisResult.data.attributes.stats['confirmed-timeout'],
-                            fileName: fileName 
-                            
-                        });
-    
-                        window.location.href = `detalles/results.html?${params.toString()}`;
-                    } catch (error) {
-                        console.error('Error:', error);
-                    }
-                }
-            });
-        </script>
-        
+        </div>     
         <div id="urlInputContainer">
             <!-- SVG y campo de entrada para la URL -->
             <svg xmlns="http://www.w3.org/2000/svg" height="70" viewBox="0 0 746 525">
@@ -124,60 +73,10 @@
             </svg>
             <form id="urlForm">
                 <input type="text" id="urlInput" placeholder="Enter URL">
-                <button type="submit">Enviar</button>
+                <button type="submit">Submit</button>
             </form>
+            <div id="resultContainer" class="hidden"> </div>
         </div>
-        
-        
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Seleccionar el formulario y manejar el evento submit
-            const form = document.getElementById('urlForm');
-        
-            form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
-        
-                const urlInput = document.getElementById('urlInput').value;
-        
-                // URL de la API a la que se enviará la solicitud POST
-                const apiUrl = 'http://localhost:9090/api/client';
-        
-                // Datos a enviar en el body de la solicitud
-                const data = {
-                    url: urlInput
-                };
-        
-                // Opciones de la solicitud
-                const options = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                };
-        
-                // Función para enviar la solicitud
-                async function sendRequest() {
-                    try {
-                        const response = await fetch(apiUrl, options);
-                        if (!response.ok) {
-                            throw new Error('Error en la solicitud: ' + response.statusText);
-                        }
-                        const responseData = await response.json();
-                        console.log('Respuesta de la API:', responseData);
-                        // Aquí puedes manejar la respuesta de la API como desees
-                        alert('Solicitud exitosa!');
-                    } catch (error) {
-                        console.error('Error:', error);
-                        alert('Error al enviar la solicitud');
-                    }
-                }
-        
-                // Llamar a la función para enviar la solicitud
-                sendRequest();
-            });
-        });
-        </script>
         
     </main>
     <footer class="footer">
@@ -186,23 +85,7 @@
         </div>
     </footer>
 
-    <script>
-        function showFileChooser() {
-            document.getElementById('fileInputContainer').style.display = 'block';
-            document.getElementById('urlInputContainer').style.display = 'none';
-        }
-
-        function showUrlInput() {
-            document.getElementById('fileInputContainer').style.display = 'none';
-            document.getElementById('urlInputContainer').style.display = 'block';
-        }
-
-        function redirectToPage() {
-        window.location.href = '/SaveZone/usuario/data/dataset.html';
-    }
-    </script>
-    
-    
+    <script src="index.js"></script>
 </body>
 </html>
 
