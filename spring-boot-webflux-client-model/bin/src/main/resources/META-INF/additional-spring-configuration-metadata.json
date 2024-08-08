@@ -1,0 +1,27 @@
+{"properties": [
+  {
+    "name": "config.base.endpoint",
+    "type": "java.lang.String",
+    "description": "A description for 'config.base.endpoint'"
+  },
+  {
+    "name": "microservice1.base.endpoint",
+    "type": "java.lang.String",
+    "description": "A description for 'microservice1.base.endpoint'"
+  },
+  {
+    "name": "microservice2.base.endpoint",
+    "type": "java.lang.String",
+    "description": "A description for 'microservice2.base.endpoint'"
+  },
+  {
+    "name": "clave.base.api",
+    "type": "java.lang.String",
+    "description": "A description for 'clave.base.api'"
+  },
+  {
+    "name": "ruta.base.send",
+    "type": "java.lang.String",
+    "description": "A description for 'ruta.base.send'"
+  }
+]}

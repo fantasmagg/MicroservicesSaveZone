@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import spring_boot_webflux_client_model.client.app.dto.HistorialUrlDto;
 import spring_boot_webflux_client_model.client.app.dto.VirusTotalAttributesDTO;
 import spring_boot_webflux_client_model.client.app.models.UrlDto;
 import spring_boot_webflux_client_model.client.app.models.VirusTotalAnalysisDTO;
@@ -41,6 +43,7 @@ public class UrlServiceImpl  implements UrlService{
 	public Mono<UrlDto> save(UrlDto url) {
 
 		return client.post()
+				.uri("/predict")
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
 				.body(BodyInserters.fromValue(url))
@@ -91,6 +94,16 @@ public class UrlServiceImpl  implements UrlService{
 				.accept(MediaType.APPLICATION_JSON)
 				.retrieve()
 				.bodyToMono(VirusTotalAttributesDTO.class);
+	}
+
+	@Override
+	public Flux<HistorialUrlDto> getUrls() {
+		
+		return client.get()
+				.uri("/scanned_urls")
+				.accept(MediaType.APPLICATION_JSON)
+				.retrieve()
+				.bodyToFlux(HistorialUrlDto.class);
 	}
 	
 }
