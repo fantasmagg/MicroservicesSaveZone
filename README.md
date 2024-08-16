@@ -1,0 +1,1 @@
+This is a microservice between Java and Python. In Python there is a URL classification model. The model classifies them between 'benign', 'defacement', 'malware' and 'phishing'. The Java client is still under construction. 
